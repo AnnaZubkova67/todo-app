@@ -55,7 +55,9 @@ export default class App extends Component {
             id: Math.random(),
             done: false,
             checked: false,
-            style: ''
+            style: '',
+            timeOfCreation: new Date(),
+            editing: false
         }
     }
 
@@ -65,6 +67,22 @@ export default class App extends Component {
             newArr = newArr.map((todo) => {
                 if (todo.id === id) {
                     return {...todo, done: !todo.done, checked: !todo.checked}
+                } else {
+                    return {...todo}
+                }
+            })
+            return {
+                todoData: newArr
+            }
+        })
+    }
+
+    onToggleEditing = (id) => {
+        this.setState(({todoData}) => {
+            let newArr = JSON.parse(JSON.stringify(todoData));
+            newArr = newArr.map((todo) => {
+                if (todo.id === id) {
+                    return {...todo, editing: !todo.editing, checked: !todo.checked}
                 } else {
                     return {...todo}
                 }
@@ -99,6 +117,7 @@ export default class App extends Component {
         })
     }
 
+
     render() {
 
         const countActive = this.state.todoData.filter((todo) => !todo.done).length;
@@ -111,7 +130,8 @@ export default class App extends Component {
                 <section className={'main'}>
                     <TaskList todos={this.state.todoData}
                               onDeleted={this.deleteItem}
-                              onToggleDone={this.onToggleDone}/>
+                              onToggleDone={this.onToggleDone}
+                              onToggleEditing={this.onToggleEditing}/>
                     <Footer onFilter={this.onFilter}
                             onClear={this.clearCompleted}
                     countActive={countActive}/>

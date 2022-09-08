@@ -1,55 +1,49 @@
 import React, {Component} from "react";
+import {formatDistanceToNow} from 'date-fns'
+
 import "./task.css";
+
 
 export default class Task extends Component {
 
     state = {
-        done: false,
-        checked: false
+        newDate: 'less than a minute'
     }
 
-    // onLabelClick = (e) => {
-    //     this.setState(({done, checked}) => {
-    //         e.target.closest('.view').firstChild.checked = !checked;
-    //         console.log(this.props)
-    //         return {
-    //             done: !done,
-    //             checked: !checked
-    //         }
-    //     })
-    //
-    // }
+
     render() {
-        // console.log(this.props)
-        const {label, onDeleted, onToggleDone, done, style} = this.props;
+        const {label, onDeleted, onToggleDone, done, style, timeOfCreation, onToggleEditing, editing} = this.props;
+
+        setInterval(() => {
+            this.setState({
+                newDate: formatDistanceToNow(new Date(timeOfCreation))
+            })
+        }, 30000)
 
         let className = `${style}`;
-        if(done){
-            className +=' completed';
+        if (done) {
+            className += ' completed';
+        }
+        if (editing) {
+            className += ' edit';
         }
 
         return (
-            <li
-                className={className}
-                >
+            <li className={className}>
                 <div className='view'
                      onClick={onToggleDone}>
                     {/*<input className="toggle" type="checkbox" defaultChecked={this.state.checked}/>*/}
-                    <input className="toggle" type="checkbox" />
-                    <label >
-                    <span className='description'
-                          >
-                        {label}
-                    </span>
-                        <span className="created">created 17 seconds ago</span>
+                    <input className="toggle" type="checkbox"/>
+                    <label>
+                    <span className='description'>{label}</span>
+                        <span className="created">{this.state.newDate}</span>
                     </label>
-                    <button className="icon icon-edit"/>
+                    <button className="icon icon-edit"
+                    onClick={onToggleEditing}/>
                     <button className="icon icon-destroy"
-                    onClick={onDeleted}
-                    />
+                            onClick={onDeleted}/>
                 </div>
             </li>
-
         );
     }
 }
