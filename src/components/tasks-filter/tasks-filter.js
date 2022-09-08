@@ -1,20 +1,29 @@
-import React from "react";
+import React, {Component} from "react";
 
 import './tasks-filter.css';
 
-const TasksFilter = () => {
-    return (
-        <ul className="filters">
-            <li>
-                <button className="selected">All</button>
-            </li>
-            <li>
-                <button>Active</button>
-            </li>
-            <li>
-                <button>Completed</button>
-            </li>
-        </ul>
-    )
+
+export default class TasksFilter extends Component{
+
+    render() {
+
+        return (
+            <ul className="filters">
+                <li>
+                    <button
+                        onClick={(e) => {
+                            this.props.onFilter('all')
+                        }}>All</button>
+                </li>
+                <li>
+                    <button
+                        onClick={() => this.props.onFilter('active')}>Active</button>
+                </li>
+                <li>
+                    <button
+                            onClick={() => this.props.onFilter('completed')}>Completed</button>
+                </li>
+            </ul>
+        )
+    }
 }
-export default TasksFilter;
