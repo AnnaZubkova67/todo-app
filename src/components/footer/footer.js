@@ -18,14 +18,15 @@ export default class Footer extends Component {
     }
 
     render() {
-        const {countActive, onFilter, onClear } = this.props
+        const {countActive, onFilter, onClear} = this.props
 
-        return(
+        return (
             <footer className="footer">
                 <span className="todo-count">{countActive} items left</span>
                 <TasksFilter onFilter={onFilter}/>
                 <button className="clear-completed"
-                onClick={onClear}>Clear completed</button>
+                        onClick={onClear}>Clear completed
+                </button>
             </footer>
         )
     }

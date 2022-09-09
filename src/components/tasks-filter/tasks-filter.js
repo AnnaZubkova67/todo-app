@@ -3,25 +3,20 @@ import React, {Component} from "react";
 import './tasks-filter.css';
 
 
-export default class TasksFilter extends Component{
+export default class TasksFilter extends Component {
 
     render() {
 
         return (
             <ul className="filters">
                 <li>
-                    <button
-                        onClick={(e) => {
-                            this.props.onFilter('all')
-                        }}>All</button>
+                    <button onClick={() => this.props.onFilter('all')}>All</button>
                 </li>
                 <li>
-                    <button
-                        onClick={() => this.props.onFilter('active')}>Active</button>
+                    <button onClick={() => this.props.onFilter('active')}>Active</button>
                 </li>
                 <li>
-                    <button
-                            onClick={() => this.props.onFilter('completed')}>Completed</button>
+                    <button onClick={() => this.props.onFilter('completed')}>Completed</button>
                 </li>
             </ul>
         )

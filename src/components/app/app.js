@@ -15,6 +15,23 @@ export default class App extends Component {
         ]
     }
 
+    editingTask = (text, id) => {
+        this.setState(({todoData}) => {
+            let newObj = JSON.parse(JSON.stringify(todoData));
+            let newTask = newObj.map((todo) => {
+                if (todo.id === id) {
+                    return {...todo, label: text, editing: !todo.editing}
+                } else {
+                    return {...todo}
+                }
+            })
+            console.log(newTask)
+            return {
+                todoData: newTask
+            }
+        })
+    }
+
 
     onFilter = (button) => {
         this.setState(({todoData}) => {
@@ -52,21 +69,20 @@ export default class App extends Component {
     createTodoItem(label) {
         return {
             label,
-            id: Math.random(),
+            id: String(Math.random()),
             done: false,
-            checked: false,
             style: '',
             timeOfCreation: new Date(),
             editing: false
         }
     }
 
-    onToggleDone = (id) => {
+    onToggle = (nameStatus, id) => {
         this.setState(({todoData}) => {
             let newArr = JSON.parse(JSON.stringify(todoData));
             newArr = newArr.map((todo) => {
                 if (todo.id === id) {
-                    return {...todo, done: !todo.done, checked: !todo.checked}
+                    return {...todo, [nameStatus]: !todo[nameStatus]}
                 } else {
                     return {...todo}
                 }
@@ -77,20 +93,12 @@ export default class App extends Component {
         })
     }
 
+    onToggleDone = (id) => {
+        this.onToggle('done', id);
+    }
+
     onToggleEditing = (id) => {
-        this.setState(({todoData}) => {
-            let newArr = JSON.parse(JSON.stringify(todoData));
-            newArr = newArr.map((todo) => {
-                if (todo.id === id) {
-                    return {...todo, editing: !todo.editing, checked: !todo.checked}
-                } else {
-                    return {...todo}
-                }
-            })
-            return {
-                todoData: newArr
-            }
-        })
+        this.onToggle('editing', id);
     }
 
     deleteItem = (id) => {
@@ -103,6 +111,7 @@ export default class App extends Component {
             }
         })
     }
+
 
     addItem = (text) => {
         const newItem = this.createTodoItem(text)
@@ -118,6 +127,8 @@ export default class App extends Component {
     }
 
 
+
+
     render() {
 
         const countActive = this.state.todoData.filter((todo) => !todo.done).length;
@@ -131,7 +142,8 @@ export default class App extends Component {
                     <TaskList todos={this.state.todoData}
                               onDeleted={this.deleteItem}
                               onToggleDone={this.onToggleDone}
-                              onToggleEditing={this.onToggleEditing}/>
+                              onToggleEditing={this.onToggleEditing}
+                              editingTask={this.editingTask}/>
                     <Footer onFilter={this.onFilter}
                             onClear={this.clearCompleted}
                             countActive={countActive}/>

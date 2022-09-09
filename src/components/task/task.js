@@ -9,7 +9,6 @@ export default class Task extends Component {
 
     static defaultProps = {
         label: ''
-
     }
 
     static propTypes = {
@@ -18,7 +17,22 @@ export default class Task extends Component {
 
 
     state = {
-        newDate: 'less than a minute'
+        newDate: 'less than a minute',
+        valueInput: this.props.label
+
+    }
+    onLabelChange = (e) => {
+
+        this.setState({
+            valueInput: e.target.value
+        })
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state.valueInput, this.props.id)
+        this.props.editingTask(this.state.valueInput, this.props.id);
+
     }
 
 
@@ -32,28 +46,38 @@ export default class Task extends Component {
         }, 30000)
 
         let className = `${style}`;
+        let classInput = `toggle`
         if (done) {
             className += ' completed';
+            classInput += ' checked'
         }
         if (editing) {
             className += ' edit';
         }
+        const newEditingTask = (
+            <form onSubmit={this.onSubmit}>
+                <input className={'new-todo'} type ='text'
+                       onChange={this.onLabelChange}/>
+            </form>
 
-        return (
-            <li className={className}>
-                <div className='view'
-                     onClick={onToggleDone}>
-                    {/*<input className="toggle" type="checkbox" defaultChecked={this.state.checked}/>*/}
-                    <input className="toggle" type="checkbox"/>
-                    <label>
-                    <span className='description'>{label}</span>
+        )
+        const viewTask = (
+                <div className='view'>
+                    <input className={classInput} type='checkbox' />
+                    <label onClick={onToggleDone}>
+                        <span className='description'>{label}</span>
                         <span className="created">{this.state.newDate}</span>
                     </label>
                     <button className="icon icon-edit"
-                    onClick={onToggleEditing}/>
+                            onClick={onToggleEditing}/>
                     <button className="icon icon-destroy"
                             onClick={onDeleted}/>
                 </div>
+        )
+
+        return (
+            <li className={className}>
+                {editing ? newEditingTask : viewTask}
             </li>
         );
     }
