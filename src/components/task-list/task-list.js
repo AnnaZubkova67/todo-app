@@ -2,6 +2,7 @@ import React from "react";
 
 import Task from "../task";
 import './task-list.css'
+import PropTypes from "prop-types";
 
 const TaskList = ({ todos, onDeleted, onToggleDone, onToggleEditing }) => {
 
@@ -25,6 +26,16 @@ const TaskList = ({ todos, onDeleted, onToggleDone, onToggleEditing }) => {
             { elements }
         </ul>
     );
+}
+
+TaskList.defaultProps = {
+    onDeleted: () => {},
+    onToggleDone: () => {},
+    onToggleEditing: () => {}
+}
+
+TaskList.propTypes = {
+    todos: PropTypes.array.isRequired
 }
 
 export default TaskList;

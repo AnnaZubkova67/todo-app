@@ -134,7 +134,7 @@ export default class App extends Component {
                               onToggleEditing={this.onToggleEditing}/>
                     <Footer onFilter={this.onFilter}
                             onClear={this.clearCompleted}
-                    countActive={countActive}/>
+                            countActive={countActive}/>
                 </section>
             </section>
         )

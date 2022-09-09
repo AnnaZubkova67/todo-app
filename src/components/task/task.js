@@ -2,9 +2,20 @@ import React, {Component} from "react";
 import {formatDistanceToNow} from 'date-fns'
 
 import "./task.css";
+import PropTypes from "prop-types";
 
 
 export default class Task extends Component {
+
+    static defaultProps = {
+        label: ''
+
+    }
+
+    static propTypes = {
+        label: PropTypes.node
+    }
+
 
     state = {
         newDate: 'less than a minute'
