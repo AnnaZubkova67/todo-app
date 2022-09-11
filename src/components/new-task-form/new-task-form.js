@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 export default class NewTaskForm extends Component {
 
     static defaultProps = {
-        onItemAdded: () => {}
+        onItemAdded: () => {
+        }
 
     }
 
@@ -18,14 +19,14 @@ export default class NewTaskForm extends Component {
         label: ''
     }
 
-    onLabelChange = (e) => {
+    labelChange = (e) => {
 
         this.setState({
             label: e.target.value
         })
     }
 
-    onSubmit = (e) => {
+    submit = (e) => {
         e.preventDefault();
         this.props.onItemAdded(this.state.label);
         this.setState({
@@ -37,11 +38,11 @@ export default class NewTaskForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.submit}>
                 <input className="new-todo"
                        placeholder="What needs to be done?"
                        autoFocus
-                       onChange={this.onLabelChange}
+                       onChange={this.labelChange}
                        value={this.state.label}/>
             </form>
 

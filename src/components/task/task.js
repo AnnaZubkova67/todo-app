@@ -17,31 +17,34 @@ export default class Task extends Component {
 
 
     state = {
-        newDate: 'less than a minute',
+        timeFromCreation: 'less than a minute',
         valueInput: this.props.label
 
     }
-    onLabelChange = (e) => {
+    labelChange = (e) => {
 
         this.setState({
             valueInput: e.target.value
         })
     }
 
-    onSubmit = (e) => {
+    submit = (e) => {
         e.preventDefault();
-        console.log(this.state.valueInput, this.props.id)
         this.props.editingTask(this.state.valueInput, this.props.id);
 
     }
 
 
     render() {
-        const {label, onDeleted, onToggleDone, done, style, timeOfCreation, onToggleEditing, editing} = this.props;
+        const {
+            label, onDeleted, onToggleDone,
+            done, style, timeOfCreation,
+            onToggleEditing, editing
+        } = this.props;
 
         setInterval(() => {
             this.setState({
-                newDate: formatDistanceToNow(new Date(timeOfCreation))
+                timeFromCreation: formatDistanceToNow(new Date(timeOfCreation))
             })
         }, 30000)
 
@@ -55,24 +58,26 @@ export default class Task extends Component {
             className += ' edit';
         }
         const newEditingTask = (
-            <form onSubmit={this.onSubmit}>
-                <input className={'new-todo'} type ='text'
-                       onChange={this.onLabelChange}/>
+            <form onSubmit={this.submit}>
+                <input className={'new-todo'} type='text'
+                       onChange={this.labelChange}
+                       value={this.state.valueInput}/>
             </form>
 
         )
         const viewTask = (
-                <div className='view'>
-                    <input className={classInput} type='checkbox' />
-                    <label onClick={onToggleDone}>
-                        <span className='description'>{label}</span>
-                        <span className="created">{this.state.newDate}</span>
-                    </label>
-                    <button className="icon icon-edit"
-                            onClick={onToggleEditing}/>
-                    <button className="icon icon-destroy"
-                            onClick={onDeleted}/>
-                </div>
+            <div className='view'>
+                <input className={classInput} type='checkbox'
+                       onClick={onToggleDone}/>
+                <label onClick={onToggleDone}>
+                    <span className='description'>{label}</span>
+                    <span className="created">{this.state.timeFromCreation}</span>
+                </label>
+                <button className="icon icon-edit"
+                        onClick={onToggleEditing}/>
+                <button className="icon icon-destroy"
+                        onClick={onDeleted}/>
+            </div>
         )
 
         return (

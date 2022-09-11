@@ -15,57 +15,6 @@ export default class App extends Component {
         ]
     }
 
-    editingTask = (text, id) => {
-        this.setState(({todoData}) => {
-            let newObj = JSON.parse(JSON.stringify(todoData));
-            let newTask = newObj.map((todo) => {
-                if (todo.id === id) {
-                    return {...todo, label: text, editing: !todo.editing}
-                } else {
-                    return {...todo}
-                }
-            })
-            console.log(newTask)
-            return {
-                todoData: newTask
-            }
-        })
-    }
-
-
-    onFilter = (button) => {
-        this.setState(({todoData}) => {
-            let newObj = JSON.parse(JSON.stringify(todoData));
-            let newTask = newObj.map((todo) => {
-                todo.style = '';
-                if (button === 'completed' && !todo.done) {
-                    todo.style = 'hidden'
-                } else if (button === 'active' && todo.done) {
-                    todo.style = 'hidden'
-                }
-                return todo;
-            })
-            return {
-                todoData: newTask
-            }
-        })
-    }
-
-    clearCompleted = () => {
-        this.setState(({todoData}) => {
-            let newObj = JSON.parse(JSON.stringify(todoData));
-            let newTask = newObj.filter((todo) => {
-                if (!todo.done) {
-                    return todo;
-                }
-            })
-            return {
-                todoData: newTask
-            }
-        })
-    }
-
-
     createTodoItem(label) {
         return {
             label,
@@ -77,10 +26,56 @@ export default class App extends Component {
         }
     }
 
+    editingTask = (text, id) => {
+        this.setState(({todoData}) => {
+            let newArrTask = [...todoData].map((todo) => {
+                if (todo.id === id) {
+                    return {...todo, label: text, editing: !todo.editing}
+                } else {
+                    return {...todo}
+                }
+            })
+            return {
+                todoData: newArrTask
+            }
+        })
+    }
+
+
+    filterTask = (button) => {
+        this.setState(({todoData}) => {
+            let newArrTask = [...todoData].map((todo) => {
+                todo.style = '';
+                if (button === 'completed' && !todo.done) {
+                    todo.style = 'hidden'
+                } else if (button === 'active' && todo.done) {
+                    todo.style = 'hidden'
+                }
+                return todo;
+            })
+            return {
+                todoData: newArrTask
+            }
+        })
+    }
+
+    clearCompleted = () => {
+        this.setState(({todoData}) => {
+            let newArrTask = [...todoData].filter((todo) => {
+                if (!todo.done) {
+                    return todo;
+                }
+            })
+            return {
+                todoData: newArrTask
+            }
+        })
+    }
+
+
     onToggle = (nameStatus, id) => {
         this.setState(({todoData}) => {
-            let newArr = JSON.parse(JSON.stringify(todoData));
-            newArr = newArr.map((todo) => {
+            let newArrTask = [...todoData].map((todo) => {
                 if (todo.id === id) {
                     return {...todo, [nameStatus]: !todo[nameStatus]}
                 } else {
@@ -88,16 +83,16 @@ export default class App extends Component {
                 }
             })
             return {
-                todoData: newArr
+                todoData: newArrTask
             }
         })
     }
 
-    onToggleDone = (id) => {
+    toggleDone = (id) => {
         this.onToggle('done', id);
     }
 
-    onToggleEditing = (id) => {
+    toggleEditing = (id) => {
         this.onToggle('editing', id);
     }
 
@@ -116,17 +111,12 @@ export default class App extends Component {
     addItem = (text) => {
         const newItem = this.createTodoItem(text)
         this.setState(({todoData}) => {
-            const newArr = [
-                ...todoData,
-                newItem
-            ]
+            const newArrTask = [...todoData, newItem]
             return {
-                todoData: newArr
+                todoData: newArrTask
             }
         })
     }
-
-
 
 
     render() {
@@ -141,10 +131,10 @@ export default class App extends Component {
                 <section className={'main'}>
                     <TaskList todos={this.state.todoData}
                               onDeleted={this.deleteItem}
-                              onToggleDone={this.onToggleDone}
-                              onToggleEditing={this.onToggleEditing}
+                              onToggleDone={this.toggleDone}
+                              onToggleEditing={this.toggleEditing}
                               editingTask={this.editingTask}/>
-                    <Footer onFilter={this.onFilter}
+                    <Footer onFilter={this.filterTask}
                             onClear={this.clearCompleted}
                             countActive={countActive}/>
                 </section>

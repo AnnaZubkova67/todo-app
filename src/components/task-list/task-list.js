@@ -18,7 +18,7 @@ const TaskList = ({todos, onDeleted, onToggleDone, onToggleEditing, editingTask}
                   onDeleted={() => onDeleted(id)}
                   onToggleDone={() => onToggleDone(id)}
                   onToggleEditing={() => onToggleEditing(id)}
-                      editingTask={editingTask}
+                  editingTask={editingTask}
             />
         );
     });

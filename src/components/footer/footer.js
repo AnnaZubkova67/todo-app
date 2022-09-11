@@ -7,8 +7,10 @@ import PropTypes from 'prop-types';
 export default class Footer extends Component {
 
     static defaultProps = {
-        onFilter: () => {},
-        onClear: () => {}
+        onFilter: () => {
+        },
+        onClear: () => {
+        }
 
     }
     static propTypes = {
