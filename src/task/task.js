@@ -44,7 +44,7 @@ export default class Task extends Component {
       className += ' edit';
     }
     const newEditingTask = (
-      <form onSubmit={submit}>
+      <form onSubmit={this.submit}>
         <input className="new-todo" type="text" onChange={this.labelChange} value={valueInput} />
       </form>
     );
