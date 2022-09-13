@@ -41,11 +41,11 @@ export default class Task extends Component {
       classInput += ' checked';
     }
     if (editing) {
-      className += ' edit';
+      className += ' editing';
     }
     const newEditingTask = (
       <form onSubmit={this.submit}>
-        <input className="new-todo" type="text" onChange={this.labelChange} value={valueInput} />
+        <input className="edit" type="text" onChange={this.labelChange} value={valueInput} />
       </form>
     );
     const viewTask = (
