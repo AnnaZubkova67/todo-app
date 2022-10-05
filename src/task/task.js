@@ -14,6 +14,7 @@ export default class Task extends Component {
       timerMin: this.props.timerMin,
       timerSec: this.props.timerSec,
       active: false,
+      blurEditing: false,
     };
   }
 
@@ -38,13 +39,6 @@ export default class Task extends Component {
     }
   };
 
-  submit = (e) => {
-    e.preventDefault();
-    const { editingTask, id } = this.props;
-    const { valueInput } = this.state;
-    editingTask(valueInput, id);
-  };
-
   playTimer = () => {
     this.setState({
       active: true,
@@ -56,6 +50,38 @@ export default class Task extends Component {
     clearInterval(this.timerID);
     this.setState({
       active: false,
+    });
+  };
+
+  clickButtonEditing = (e) => {
+    const { onToggleEditing } = this.props;
+    onToggleEditing();
+    const focusElem = e.target.closest('li').querySelector('.edit');
+    this.setState({
+      blurEditing: true,
+    });
+    setInterval(() => focusElem.focus(), 500);
+  };
+
+  exitEditing = (e) => {
+    const { editingTask, id } = this.props;
+    const { valueInput } = this.state;
+    if (e.keyCode === 27 || e.keyCode === 13) {
+      editingTask(valueInput, id);
+      this.setState({
+        blurEditing: false,
+      });
+    }
+  };
+
+  blur = () => {
+    if (this.state.blurEditing) {
+      const { editingTask, id } = this.props;
+      const { valueInput } = this.state;
+      editingTask(valueInput, id);
+    }
+    this.setState({
+      blurEditing: false,
     });
   };
 
@@ -84,47 +110,50 @@ export default class Task extends Component {
       classTimer += ' end';
     }
 
-    const newEditingTask = (
-      <form onSubmit={this.submit}>
-        <input className="edit" type="text" onChange={this.labelChange} value={valueInput} />
-      </form>
-    );
     // eslint-disable-next-line jsx-a11y/control-has-associated-label
     const buttonPlay = <button type="button" className="icon-play" onClick={this.playTimer} />;
     // eslint-disable-next-line jsx-a11y/control-has-associated-label
     const buttonPause = <button type="button" className="icon-pause" onClick={this.pauseTimer} />;
-    const viewTask = (
-      <div className="view">
-        <input className={classInput} type="checkbox" onClick={onToggleDone} />
-        <label htmlFor="input">
-          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-          <span className="title" onClick={onToggleDone} onKeyDown={onToggleDone}>
-            {label}
-          </span>
-          <span className="description">
-            {active ? buttonPause : buttonPlay}
-            <div className={classTimer}>{`${minute}:${second}`}</div>
-          </span>
-          <span className="created">{timeFromCreation}</span>
-        </label>
-        <button
-          type="button"
-          aria-label="Save"
-          className="icon icon-edit"
-          onClick={onToggleEditing}
-          onKeyDown={onToggleEditing}
+    return (
+      <li className={className}>
+        <div className="view">
+          <input className={classInput} type="checkbox" onClick={onToggleDone} />
+          <label htmlFor="input">
+            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+            <span className="title" onClick={onToggleDone} onKeyDown={onToggleDone}>
+              {label}
+            </span>
+            <span className="description">
+              {active ? buttonPause : buttonPlay}
+              <div className={classTimer}>{`${minute}:${second}`}</div>
+            </span>
+            <span className="created">{timeFromCreation}</span>
+          </label>
+          <button
+            type="button"
+            aria-label="Save"
+            className="icon icon-edit"
+            onClick={this.clickButtonEditing}
+            onKeyDown={onToggleEditing}
+          />
+          <button
+            type="button"
+            aria-label="Save"
+            className="icon icon-destroy"
+            onClick={onDeleted}
+            onKeyDown={onDeleted}
+          />
+        </div>
+        <input
+          className="edit"
+          type="text"
+          value={valueInput}
+          onChange={this.labelChange}
+          onKeyDown={this.exitEditing}
+          onBlur={this.blur}
         />
-        <button
-          type="button"
-          aria-label="Save"
-          className="icon icon-destroy"
-          onClick={onDeleted}
-          onKeyDown={onDeleted}
-        />
-      </div>
+      </li>
     );
-
-    return <li className={className}>{editing ? newEditingTask : viewTask}</li>;
   }
 }
 

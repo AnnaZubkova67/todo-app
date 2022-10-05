@@ -44,13 +44,18 @@ body {
 .hidden {
     display: none;
 }
+
 .todoapp {
+    line-height: 1.4em;
+    min-width: 230px;
+    max-width: 550px;
     background: #fff;
     margin: 130px 0 40px 0;
     position: relative;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
     0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
+
 .todoapp h1 {
     position: absolute;
     top: -140px;
@@ -63,11 +68,13 @@ body {
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
 }
+
 .main {
     position: relative;
     z-index: 2;
     border-top: 1px solid #e6e6e6;
 }
+
 .info {
     margin: 65px auto 0;
     color: #4d4d4d;
