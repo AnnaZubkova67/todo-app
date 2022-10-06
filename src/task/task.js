@@ -64,9 +64,16 @@ export default class Task extends Component {
   };
 
   exitEditing = (e) => {
-    const { editingTask, id } = this.props;
-    const { valueInput } = this.state;
-    if (e.keyCode === 27 || e.keyCode === 13) {
+    const { onToggleEditing } = this.props;
+    if (e.keyCode === 27) {
+      onToggleEditing();
+      this.setState({
+        blurEditing: false,
+        valueInput: this.props.label,
+      });
+    } else if (e.keyCode === 13) {
+      const { editingTask, id } = this.props;
+      const { valueInput } = this.state;
       editingTask(valueInput, id);
       this.setState({
         blurEditing: false,
@@ -76,12 +83,12 @@ export default class Task extends Component {
 
   blur = () => {
     if (this.state.blurEditing) {
-      const { editingTask, id } = this.props;
-      const { valueInput } = this.state;
-      editingTask(valueInput, id);
+      const { onToggleEditing } = this.props;
+      onToggleEditing();
     }
     this.setState({
       blurEditing: false,
+      valueInput: this.props.label,
     });
   };
 

@@ -6,33 +6,20 @@ import TaskList from '../task-list';
 import './app.css';
 
 export default class App extends Component {
-  static createTodoItem(label, timerMin, timerSec) {
-    return {
-      label,
-      timerMin,
-      timerSec,
-      id: String(Math.random()),
-      done: false,
-      style: '',
-      timeOfCreation: new Date(),
-      editing: false,
-    };
-  }
-
   constructor() {
     super();
     this.state = {
       todoData: [
-        App.createTodoItem('Completed task', 12, 15),
-        App.createTodoItem('Editing task', 12, 15),
-        App.createTodoItem('Active task', 12, 15),
+        this.createTodoItem('Completed task', 12, 15),
+        this.createTodoItem('Editing task', 12, 15),
+        this.createTodoItem('Active task', 12, 15),
       ],
     };
   }
 
   onToggle = (nameStatus, id) => {
     this.setState(({ todoData }) => {
-      const newArrTask = JSON.parse(JSON.stringify(todoData)).map((todo) => {
+      const newArrTask = [...todoData].map((todo) => {
         if (todo.id === id) {
           return { ...todo, [nameStatus]: !todo[nameStatus] };
         }
@@ -46,7 +33,7 @@ export default class App extends Component {
 
   clearCompleted = () => {
     this.setState(({ todoData }) => {
-      const newArrTask = JSON.parse(JSON.stringify(todoData)).filter((todo) => !todo.done);
+      const newArrTask = [...todoData].filter((todo) => !todo.done);
       return {
         todoData: newArrTask,
       };
@@ -55,7 +42,7 @@ export default class App extends Component {
 
   filterTask = (button) => {
     this.setState(({ todoData }) => {
-      const newArrTask = JSON.parse(JSON.stringify(todoData)).map((todo) => {
+      const newArrTask = [...todoData].map((todo) => {
         todo.style = '';
         if (button === 'completed' && !todo.done) {
           todo.style = 'hidden';
@@ -72,7 +59,7 @@ export default class App extends Component {
 
   editingTask = (text, id) => {
     this.setState(({ todoData }) => {
-      const newArrTask = JSON.parse(JSON.stringify(todoData)).map((todo) => {
+      const newArrTask = [...todoData].map((todo) => {
         if (todo.id === id) {
           return { ...todo, label: text, editing: !todo.editing };
         }
@@ -103,7 +90,7 @@ export default class App extends Component {
   };
 
   addItem = (text, timerMin, timerSec) => {
-    const newItem = App.createTodoItem(text, timerMin, timerSec);
+    const newItem = this.createTodoItem(text, timerMin, timerSec);
     this.setState(({ todoData }) => {
       const newArrTask = [...todoData, newItem];
       return {
@@ -111,6 +98,20 @@ export default class App extends Component {
       };
     });
   };
+
+  // eslint-disable-next-line class-methods-use-this
+  createTodoItem(label, timerMin, timerSec) {
+    return {
+      label,
+      timerMin,
+      timerSec,
+      id: String(Math.random()),
+      done: false,
+      style: '',
+      timeOfCreation: new Date(),
+      editing: false,
+    };
+  }
 
   render() {
     const { todoData } = this.state;
